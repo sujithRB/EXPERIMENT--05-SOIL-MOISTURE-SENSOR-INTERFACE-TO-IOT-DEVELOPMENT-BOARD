@@ -107,11 +107,72 @@ GND is the ground pin.
 
 
 ## STM 32 CUBE PROGRAM :
+```
+Developed by : BHARATH S
+REGISTER NUMBER: 212224100006
 
+#include "main.h"
+#include "stdio.h"
+
+#if defined(__GNUC__)
+
+#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#endif
+uint16_t readValue;
+
+ADC_HandleTypeDef hadc;
+
+UART_HandleTypeDef huart2;
+
+void SystemClock_Config(void);
+static void MX_GPIO_Init(void);
+static void MX_ADC_Init(void);
+static void MX_USART2_UART_Init(void);
+
+int main(void)
+{
+    HAL_Init();
+    SystemClock_Config();
+    MX_GPIO_Init();
+    MX_ADC_Init();
+    MX_USART2_UART_Init();
+    while (1)
+  {
+	  HAL_ADC_Start(&hadc);
+	 	  	  HAL_ADC_PollForConversion(&hadc, HAL_MAX_DELAY);
+	 	  	  readValue = HAL_ADC_GetValue(&hadc);
+	 	  	  printf("Read value : %ld\n", readValue);
+
+
+	 	  	  uint32_t soilmoist = 100 - (readValue / 40.95);
+
+	 	  	  printf("Soil moisture : %ld %%\n", soilmoist);
+	 	  	  HAL_Delay(1000);
+  }
+}
+PUTCHAR_PROTOTYPE
+{
+	HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, 0xFFFF);
+
+	return ch;
+}
+```
 
 
 ## Output screen shots on serial monitor   :
+ **Screen Result**
  
+ <img width="1913" height="1029" alt="Screenshot 2025-09-29 114351" src="https://github.com/user-attachments/assets/8cbaa623-9c11-4e87-982e-fc67b8709c2c" />
+ 
+ **Hardware when made contact**
+ 
+ ![WhatsApp Image 2025-10-23 at 15 31 18_b2dbc6b9](https://github.com/user-attachments/assets/0f0d00aa-710b-4f16-99b5-3f64e6ec99c8)
+
+**Hardware when there no contact**
+
+![IMG-20251023-WA0005 1](https://github.com/user-attachments/assets/ee8b0dcd-4faf-4ae7-823c-69c403f7684e)
+
+
  
  
  
